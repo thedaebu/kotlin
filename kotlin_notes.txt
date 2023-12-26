@@ -1,0 +1,86 @@
+- key takeaway
+    - always use Of for data type declarations
+    - for lambda functions, use ->
+    - use !! for non-inferrable references
+    - use forEachIndexed for
+
+- variables
+    # val
+        - immutable
+    # var
+        - mutable
+- ternary
+    # val x = if (condition) value else otherValue
+- null safety
+    # !!
+        - adding !! to referenced variable assures Kotlin that function will work
+        ex. val result = number1!!.toInt()
+- default values
+    # ?:
+        - gives default value to a variable is accessed value is null
+        ex. val number1 = get_num() ?: 1
+- lists
+    # listOf
+        - immutable list
+        ex. val someList = listOf<String>("something", "else")
+    # mutableListOf
+        - mutable list
+        ex. val someList = mutableListOf<String>("something", "else")
+    # subList
+        - works as slice function
+    # .size
+    # .add()
+    # .remove()
+    # .removeLast()
+- loops
+    # while
+        ex. while (condition) {}
+    # for
+        ex. for (car in cars) {}
+        ex. for (i in 1..100) {}
+- when
+    - comparable to switch statements
+    # in
+        - condition statement
+    # else
+        - catch statement
+    ex. when (condition) {
+        in <condition> -> action
+        in <condition> -> action
+        else -> action
+    }
+- extension functions
+    - add custom functions to data types
+    ex. fun Int.idOff() {}
+- classes
+    - constructor is written in initial parameters for class
+    # init
+        - code block that executes at instantiation
+    # open
+        - keyword for class to allow it to be inheritable
+    # abstract
+        - keyword to disallow instantiation of class
+    ex. open class Animal(
+        val name: String,
+        val type: String
+    ) {
+        init {
+
+        }
+    }
+- lambda functions
+    - anonymous functions for kotlin
+    ex. val list = listOf()
+        val count = list.count {currentNum ->
+            currentNum > 3
+        }
+- hashmaps
+    # HashMap<key, value>()
+    ex. var hash: HashMap<String, any> = HashMap<String, any>()
+        hash[key] = value
+    .containsKey()
+- sets
+    # setOf()
+    # mutableSetOf()
+    # in
+        if (something in set)
