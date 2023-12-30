@@ -78,9 +78,25 @@
     # HashMap<key, value>()
     ex. var hash: HashMap<String, any> = HashMap<String, any>()
         hash[key] = value
-    .containsKey()
+    ex. var hash: HashMap<String, Int> = hashMapOf<String, Int>("1" to 1, "2" to 2)
+    # .containsKey()
+    - use `` for string attributes
 - sets
     # setOf()
     # mutableSetOf()
     # in
         if (something in set)
+    # .add()
+
+- let
+    - block of code that executes if reference exists
+    # it
+        - variable for reference(like this/self)
+    ex. let ref? {
+        sum += ref?.`val`
+    }
+
+- sort
+    # .sort()
+    # .sortedBy { value }
+        ex. strings.sortedBy { it.length }
