@@ -8,6 +8,7 @@
     <string name="quadrant_content3">Displays text and follows the recommended Material Design guidelines.</string>
     <string name="quadrant_title4">Text composable</string>
     <string name="quadrant_content4">Displays text and follows the recommended Material Design guidelines.</string>
+    
     <string name="lemon_tree_content">Tap the lemon tree to select a lemon</string>
     <string name="lemon_squeeze_content">Keep tapping the lemon to squeeze it</string>
     <string name="lemon_drink_content">Tap the lemonade to drink it</string>
@@ -16,4 +17,16 @@
     <string name="lemon_squeeze_title">Lemon</string>
     <string name="lemon_drink_title">Glass of Lemonade</string>
     <string name="lemon_restart_title">Empty Glass</string>
+
+    <string name="instructions">Unscramble the word using all the letters.</string>
+    <string name="skip">Skip</string>
+    <string name="submit">Submit</string>
+    <string name="score">Score: %d</string>
+    <string name="word_count">%d/10</string>
+    <string name="enter_your_word">Enter your word</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="you_scored">"You scored: %d"</string>
+    <string name="exit">Exit</string>
+    <string name="play_again">Play Again</string>
+    <string name="wrong_guess">Wrong Guess!</string>
 </resources>

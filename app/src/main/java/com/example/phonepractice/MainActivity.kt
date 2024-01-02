@@ -44,13 +44,14 @@ import com.example.phonepractice.ui.QuadrantContent
 import com.example.phonepractice.ui.BusinessCard
 import com.example.phonepractice.ui.LemonSqueeze
 import com.example.phonepractice.ui.TipCalculator
+import com.example.phonepractice.ui.GameScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             PhonePracticeTheme {
-                QuadrantContent()
+                GameScreen()
             }
         }
     }
@@ -60,6 +61,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Preview() {
     PhonePracticeTheme {
-        TipCalculator()
+        GameScreen()
     }
 }
