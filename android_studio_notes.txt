@@ -1,0 +1,61 @@
+- app lifecycles
+    - difference between focus and visibility
+    - focus
+        # onResume
+        # onPause
+    - visibility
+        # onStop
+        # onRestart
+    # onStart
+        - is called everytime visibility is true
+        - onRestart only happens after first onStart
+    # onDestroy
+        - happens when app is closed or when orientation is changed
+- mutable state
+    # by remember
+        - used to remember stored objects in a composable
+    # by rememberSaveable
+        - used to remember stored objects that need to be retrieved again after onDestroy
+    # mutableStateOf
+        - state data type
+    - add imports
+        # import androidx.compose.runtime.getValue
+        # import androidx.compose.runtime.setValue
+    ex. var result by remember { mutableStateOf( 1) }
+- textfield
+    # TextField(value = <>, onValueChange = {})
+    # OutlinedTextField
+        - Gives outline around textfield
+    # it
+        - use it as input for textfield
+    # label
+        ex. label = { Text( text = <text> ) }
+    # singleLine
+        - condenses text box to single horizontally scrollable line
+        ex. singleLine = true
+    # keyboardOptions
+        # keyboardType = KeyboardType.<type>
+            - set keyboard type
+        ex. keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+- viewmodel
+    - add implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1") under dependencies in build.gradle.kts
+    - used so that state is kept during onDestroy() instead of using by rememberSaveable state values
+- alertdialog
+    # AlertDialog()
+    - produces alert box popup
+    # onDismissRequest = {}
+        - executes when user clocks outside of dialog box
+
+
+# verticalArrangement = Arrangement.
+# horzontalAlignment = Alignment.CenterHorizontally
+# shape = RoundedCornerShape(<.dp>)
+    - use as visual
+# modifier.align(alignment = Alignment.)
+# modifier.statusBarsPadding()
+    - ?
+# modifier.safeDrawingPadding()
+    - >
+# modifier.verticalScroll(rememberScrollState())
+# modifier.wrapContentSize()
+    - wraps content according to container
