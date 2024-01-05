@@ -185,7 +185,7 @@
                 }
             }
 - network connectivity
-    1. add dependencies/plugins
+    1. add dependencies/plugins/internet permission
     2. setup retrofit network package
     3. create appropriate http request functions in apiService interface
     3. create api object from apiService class with instantiated Retrofit.Builder in network package

@@ -1,4 +1,4 @@
-package com.example.phonepractice.network
+package com.example.phonepractice.model
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName

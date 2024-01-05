@@ -1,6 +1,6 @@
 package com.example.phonepractice.data
 
-import com.example.phonepractice.network.MarsPhoto
+import com.example.phonepractice.model.MarsPhoto
 import com.example.phonepractice.network.MarsApiService
 
 interface MarsPhotosRepository {
