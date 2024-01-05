@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.marsphotos.ui.screens
+package com.example.phonepractice.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Text
@@ -22,8 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.marsphotos.R
-import com.example.marsphotos.ui.theme.MarsPhotosTheme
+import com.example.phonepractice.R
+import com.example.phonepractice.ui.theme.PhonePracticeTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.res.painterResource
@@ -86,7 +86,7 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun ResultScreenPreview() {
-    MarsPhotosTheme {
+    PhonePracticeTheme {
         ResultScreen(stringResource(R.string.placeholder_result))
     }
 }

@@ -22,7 +22,7 @@
         # import androidx.compose.runtime.getValue
         # import androidx.compose.runtime.setValue
     ex. var result by remember { mutableStateOf( 1) }
-- textfield
+# TextField
     # TextField(value = <>, onValueChange = {})
     # OutlinedTextField
         - Gives outline around textfield
@@ -37,14 +37,287 @@
         # keyboardType = KeyboardType.<type>
             - set keyboard type
         ex. keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+- classes
+    # Data class
+- uiState
+    - uiState handles local state
+    - create copy in viewmodel
+    ex. data class AppState(
+        val string = "",
+        val number = 0,
+        val number2 = 1
+    )
 - viewmodel
     - add implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1") under dependencies in build.gradle.kts
     - used so that state is kept during onDestroy() instead of using by rememberSaveable state values
-- alertdialog
+    - handles state functionality
+    ex. class AppViewModel : ViewModel() {
+        private val _uiState = MutableStateFlow(AppState())
+        val uiState: StateFlow<AppState> = _uiState.asStateFlow()
+    }
+    - uiState created is used by screen
+        ex. val gameUiState by gameViewModel.uiState.collectAsState()
+    - create new _uiState with reassignment
+        ex. _uiState.value = AppUiState(<optional values>)
+    - update _uiState with .update
+        ex. _uiState.update { currentState ->
+                currentState.copy(
+                    attribute1 = value1,
+                    attribute2 = value2
+                )
+            }
+    - get values from _uiState using _uiState.value
+        ex. val number1 = _uiState.value.number1
+- context
+    - context is same as using resources
+    ex. var context = LocalContext.current
+        context.resources.getString(id)
+- navigation
+    # NavController
+        - navigates between destinations
+    # NavGraph
+        - maps composable destinations
+    # NavHost
+        - current composable
+    1. initialize NavController
+        ex. navController: NavHostController = rememberNavController()
+    2. use enum class to define routes in main screen
+        - each could have attributes
+        ex. enum class AppScreen(@StringRes val title: Int) {
+            Route1,
+            Route2(title = R.string.route2),
+            Route3
+        }
+    3. add NavHost() where content should be
+        ex. NavHost(
+            navController = navController,
+            startDestination = AppScreen.Route1.name,
+            modifier = modifier
+        ) {}
+    4. add corresponding composables for each route
+        ex. ex. NavHost(
+            navController = navController,
+            startDestination = AppScreen.Route1.name
+        ) {
+            composable(route = AppScreen.Route1.name) {
+                Route1Screen()
+            }
+        }
+    5. call navigate to navigate to other routes
+        ex. navController.navigate(AppScreen.Route1.name)
+    6. call popBackStack to go back while also removing from app navigation stack
+        - most of the time choose inclusive = false
+        ex. navController.navigate(<route>, inclusive = false)
+        - reference back stack if needed
+        ex. val backStackEntry by navController.currentBackStackEntryAsState()
+            val currentScreen = AppScreen.valueOf(
+                backStackEntry?.destination?.route ?: AppScreen.Route.name
+            )
+            val canNavigateBack = navController.previousBackStackEntry != null
+- navigation 2
+    # BackHandler
+        - used for handling going back functionality if NavHost is not used
+        ex. BackHandler {
+            onBackPressed()
+        }
+- coroutines
+    # import kotlinx.coroutines.*
+    # delay(<value>)
+        - executes after value in ms
+    # runBlock {}
+        - code block that can execute code with coroutines
+        ex. runBlock {
+            delay(1000)
+            println("wassup")
+        }
+    # suspend
+        - add suspend keyword to functions with coroutines
+        ex. suspend fun suspendedFunction() {
+            delay(1000)
+            return result
+        }
+    # launch {}
+        - code block that signifies to run asynchronously
+    # async
+        - more efficient code block to get value
+        ex. val result: Deferred<String> = async { suspendedFunction () }
+    # await
+        - functionality attached to async results can be executed when attached with await
+        ex. return result.await()
+    # coroutineScope
+        - block that contains async code but runs synchronously
+        ex. suspend fun crScopeFunction() = coroutineScope {
+            val val1 = async { someFunction1() }
+            val val2 = async { someFunction2() }
+            return val1.await() + val2.await()
+        }
+        ex. runBlock {
+            crScopeFunction()
+            <other code>
+        }
+    - error handling
+        - in suspend function, add throw code block
+        ex. suspend fun functionName() {
+            delay(500)
+            throw AssertionError("value is invalid")
+            return value
+        }
+        # try/catch
+            - code will not break
+            ex. val someValue = async {
+                try {
+                    someFunction()
+                } catch(e: AssertionError) {
+                    println("uh oh)
+                }
+            }
+    # CoroutineContext
+        - key-value context for coroutine
+        - 4 keys: name, job, dispatcher, exception handler
+    # Dispatchers
+        - 3 built-in dispatchers: Main, IO, Default
+        # withContext(dispatcher) {}
+            - block of code that gets ran by designated dispatcher
+            ex. launch {
+                withContext(Dispatch.Default) {
+                    delay(100)
+                    println("wassup")
+                }
+            }
+- network connectivity
+    1. add dependencies/plugins
+    2. setup retrofit network package
+    3. create appropriate http request functions in apiService interface
+    3. create api object from apiService class with instantiated Retrofit.Builder in network package
+    4. in viewmodel, create request status state for ui purposes
+    5. in viewmodel, create function that calls api object function with try and catch
+    6. in ui screen, create when block to be dynamic based on apiUiState
+    - retrofit
+        - third party library that connects to internet
+        - add to dependencies in gradle build
+            # implementation("com.squareup.retrofit2:retrofit:2.9.0")
+            # implementation("com.squareup.retrofit2:converter-scalars:2.9.0") (maybe not???)
+    - create network package
+    - create API file in network package
+    - imports 
+        # import retrofit2.Retrofit
+        # import retrofit2.converter.scalars.ScalarsConverterFactory
+        # import retrofit2.http.GET
+    - create API service class
+        ex. class AppApiService {}
+    - create base_url variable
+    - initializes retrofit with converter to take JSON objects into a string
+        ex. private val retrofit = Retrofit.Builder()
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .baseUrl(base_url)
+            .build()
+    - create retrofit service object because it is expensive to recreate
+        object AppApi {
+            val retrofitService : AppApiService by lazy { 
+            retrofit.create(AppApiService::class.java)
+            }
+        }
+    - get request
+        # @GET(endpoint)
+            - @GET signifies get request
+            - endpoint is endpoint of base baseUrl
+            ex. @GET("endpoint")
+                suspend fun getData()
+    - viewmodel imports
+        # import androidx.lifecycle.viewModelScope
+        # kotlinx.coroutines.launch
+        ex. viewModelScope.launch {
+            val listResult = AppApi.retrofitService.someRequest()
+        }
+    - Internet permission
+        - in AndroidManifest.xml add before application tag
+        # <uses-permission android:name="android.permission.INTERNET" />
+    - dropped Internet
+        - use try catch for dropped Internet
+        # import java.io.IOException
+        ex. # viewModelScope.launch {
+                try {
+                    val listResult = AppApi.retrofitService.someRequest()
+                } catch (e: IOException) {
+
+                }
+
+        }
+    - add response status data in viewmodel
+        - set appUiState variable to the AppUiState.Loading
+        ex. sealed interface AppUiState {
+            data class Success(val photos: String) : AppUiState
+            object Error : AppUiState
+            object Loading : AppUiState
+        }
+        - use when block with appropriate composables to be displayed based on appUiState status
+- json parsing
+    # id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
+        - add to plugins block of gradle build
+    # implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+        - add to dependencies block for gradle build
+    # implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    # implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    - add more stuff ****
+- data layer
+    - add repository interface
+    - add network repository
+    - allows view model to no longer reference API code as the repository requests the data and provides the data to the view model
+    - override request functions
+
+
+## composables
+# alertdialog
     # AlertDialog()
     - produces alert box popup
     # onDismissRequest = {}
         - executes when user clocks outside of dialog box
+# card
+    - is a surface
+    # Card()
+# TextField
+    # TextField(value = <>, onValueChange = {})
+    # OutlinedTextField
+        - Gives outline around textfield
+    # it
+        - use it as input for textfield
+    # label
+        ex. label = { Text( text = <text> ) }
+    # singleLine
+        - condenses text box to single horizontally scrollable line
+        ex. singleLine = true
+    # keyboardOptions
+        # keyboardType = KeyboardType.<type>
+            - set keyboard type
+        ex. keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+# LazyVerticalGrid
+    # columns = GridCells.Fixed(<number of cells>)
+# LazyColumn
+
+    - is a column that loads content on demand and not all at once
+    - attributes
+        # stickyHeader {
+            Header()
+        }
+    ex. items(list) {item -> <block> }
+        -
+# Scaffold
+# LaunchedEffect()
+    - composable that can safely call suspende functions
+    - add arguments to keep track of affected variables in LaunchedEffect if they change
+    ex. LaunchedEffect(var1, var2) {
+        coroutineScope {
+            launch{ someFunction1() }
+            launch{ someFunction2() }
+        }
+        <other code>
+    }
+
+
+
+- contentPadding = PaddingValues(horizontal = , vertical =)
+- VerticalArrangement = Arrangment.spacedBy()
+- Modifier.animateItemPlacement
 
 
 # verticalArrangement = Arrangement.

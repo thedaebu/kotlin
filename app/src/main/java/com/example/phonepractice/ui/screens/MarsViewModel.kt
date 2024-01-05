@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.marsphotos.ui.screens
+package com.example.phonepractice.ui.screens
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,15 +22,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import java.io.IOException
-import com.example.marsphotos.network.MarsPhoto
+import com.example.phonepractice.network.MarsPhoto
 import retrofit2.HttpException
-import com.example.marsphotos.data.MarsPhotosRepository
+import com.example.phonepractice.data.MarsPhotosRepository
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.marsphotos.MarsPhotosApplication
+import com.example.phonepractice.MarsPhotosApplication
 
 sealed interface MarsUiState {
     data class Success(val photos: String) : MarsUiState
