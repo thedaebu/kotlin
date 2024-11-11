@@ -264,34 +264,83 @@
     - add network repository
     - allows view model to no longer reference API code as the repository requests the data and provides the data to the view model
     - override request functions
+- room
+    - imports
+        # implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
+        # ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
+        # implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
+    - database models
+        - must have @Entry decorator
+        - optional primarykey parameter
+        ex. @Entity(tablename=<tablename>)
+            data class User(
+                @PrimaryKey(autogenerate = true)
+                val id: Int = 0
+                val name: String
+            )
+    - data access object(DAO)
+        - must have @Dao decorator
+        - query methods take on sql statements as string
+        - methods must have decorator according to type of action
+        ex. @Dao
+            interface UserDao {
+                @Query("SELECT * FROM users")
+                fun getAllUsers(): Flow<List<User>>
+                @Insert(onConflict = OnConflictStrategy.IGNORE)
+                suspend fun insert(user: User)
+                @Update
+                suspend fun update(user: User)
+                @Delete
+                suspend fun delete(user: User)
+            }
+    - database instance
+        - must have @Database decorator with arguments
+            - entities is the list of data classes
+            - version starts at 1 and must increment after each schema change
+            - exportSchema determines schema backups
+        ex. @Database(entities = [User::class], version = 1, exportSchema = false)
+            abstract class AppDatabase: RoomDatabase() {
+                abstract fun userDao(): UserDao
 
+                companion object {
+                    @Volatile
+                    private var Instance: AppDatabase? = null
+
+                    fun getDatabase(context: Context): AppDatabase {
+                        return Instance ?: synchronized(this) {
+                            Room.databaseBuilder(context, UserDatabase::class.java, "app_database")
+                                .fallbackToDestructiveMigration()
+                                .build()
+                                .also { Instance = it }
+
+                        }
+                    }
+                }
+            }
+    - offline repository
+        - create repository interface with argument of DAO
+        - add offline repository to AppContainer
+        ex. interface AppRepository {
+                fun getAllUsersStream(): Flow<List<User>>
+                fun getUserStream(id: Int): Flow<User?>
+                suspend fun insertUser(user: User)
+                suspend fun deleteUser(user: User)
+                suspend fun updateUser(user: User)
+            }
+    - saving
+        - create coroutineScope
+        - use coroutineScope.launch block to save asynchronously
+
+
+- apiservice contains api util
+- repository is copy of apiservice
+- app container combines retrofit with repository
+- application is copy of app container
+- viewmodel takes in application
+- app takes in viewmodel information including factory
+- home screen takes in information from app
 
 ## composables
-# alertdialog
-    # AlertDialog()
-    - produces alert box popup
-    # onDismissRequest = {}
-        - executes when user clocks outside of dialog box
-# card
-    - is a surface
-    # Card()
-# TextField
-    # TextField(value = <>, onValueChange = {})
-    # OutlinedTextField
-        - Gives outline around textfield
-    # it
-        - use it as input for textfield
-    # label
-        ex. label = { Text( text = <text> ) }
-    # singleLine
-        - condenses text box to single horizontally scrollable line
-        ex. singleLine = true
-    # keyboardOptions
-        # keyboardType = KeyboardType.<type>
-            - set keyboard type
-        ex. keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-# LazyVerticalGrid
-    # columns = GridCells.Fixed(<number of cells>)
 # LazyColumn
 
     - is a column that loads content on demand and not all at once
@@ -301,7 +350,6 @@
         }
     ex. items(list) {item -> <block> }
         -
-# Scaffold
 # LaunchedEffect()
     - composable that can safely call suspende functions
     - add arguments to keep track of affected variables in LaunchedEffect if they change
